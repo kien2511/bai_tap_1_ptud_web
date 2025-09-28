@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ngôn ngữ côn trùng</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+        }
+
+        input, button {
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h2>Đổi số thành ngôn ngữ côn trùng 🐞</h2>
+    <input type="text" id="txtInput" placeholder="Nhập số...">
+    <button onclick="convert()">Đổi</button>
+
+    <div id="result"></div>
+
+    <script>
+        function convert() {
+            var input = document.getElementById("txtInput").value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "api.aspx?text=" + encodeURIComponent(input), true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        if (data.success) {
+                            document.getElementById("result").innerHTML =
+                                "<b>Kết quả:</b> " + data.result;
+                        } else {
+                            document.getElementById("result").innerHTML =
+                                "<span style='color:red'>" + data.message + "</span>";
+                        }
+                    } catch (e) {
+                        document.getElementById("result").innerHTML = "Lỗi JSON!";
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
